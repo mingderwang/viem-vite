@@ -2,28 +2,33 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + TS</title>
   </head>
   <body>
     <div id="app"></div>
     <script type="module">
-      import { createWalletClient, custom } from "https://esm.sh/viem";
+            import { parseEther, createWalletClient, custom } from "https://esm.sh/viem";
       import { sepolia } from "https://esm.sh/viem/chains";
       const walletClient = createWalletClient({
         chain: sepolia,
         transport: custom(window.ethereum),
       });
-      const success = await walletClient.watchAsset({
-        type: "ERC20",
-        options: {
-          address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          decimals: 18,
-          symbol: "WETH",
-        },
-      });
-      console.log(success);
+
+const [account] = await walletClient.requestAddresses() // for MetaMask
+
+//getAddresses()
+console.log(account)
+
+const hash = await walletClient.sendTransaction({
+  account,
+  to: '0x9E4C996EFD1Adf643467d1a1EA51333C72a25453',
+//  value: 100000000n
+//  value: BigInt(1e8) // 100000000n
+  value: parseEther('0.0002')
+})
+      console.log(hash);
+      window.document.querySelector('#app').innerHTML = ` <div> <h1>hash: ${hash}</h1> </div> `
     </script>
   </body>
 </html>
