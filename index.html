@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + TS</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module">
+      import { createWalletClient, custom } from "https://esm.sh/viem";
+      import { sepolia } from "https://esm.sh/viem/chains";
+      const walletClient = createWalletClient({
+        chain: sepolia,
+        transport: custom(window.ethereum),
+      });
+      const success = await walletClient.watchAsset({
+        type: "ERC20",
+        options: {
+          address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+          decimals: 18,
+          symbol: "WETH",
+        },
+      });
+      console.log(success);
+    </script>
+  </body>
+</html>
